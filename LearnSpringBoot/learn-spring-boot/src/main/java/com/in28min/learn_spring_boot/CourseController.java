@@ -13,7 +13,9 @@ public class CourseController {
     public List<Course> getAllCourses() {
         return Arrays.asList(
                 new Course(1, "AWS", "Amazon"),
-                new Course(2, "Azure", "Microsoft")
+                new Course(2, "Azure", "Microsoft"),
+                new Course(3, "GCP", "Google"),
+                new Course(4, "Java", "Udemy Test")
         );
     }
 
