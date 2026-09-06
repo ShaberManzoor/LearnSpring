@@ -5,12 +5,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.springboot.learn_jpa_hibernate.course.Course;
+import com.springboot.learn_jpa_hibernate.course.jpa.CouseJpaRepository;
 
 @Component
 public class CourseJdbcCommandLineRunner implements CommandLineRunner {
 
+//	@Autowired
+//	private CourseJdbcRepository repo;
+	
 	@Autowired
-	private CourseJdbcRepository repo;
+	private CouseJpaRepository repo;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -21,7 +25,7 @@ public class CourseJdbcCommandLineRunner implements CommandLineRunner {
 		
 		repo.deleteById(3);
 		
-		System.out.println(repo.selectById(1));
-		System.out.println(repo.selectById(2));
+		System.out.println(repo.findById(1));
+		System.out.println(repo.findById(2));
 	}
 }

@@ -1,8 +1,19 @@
 package com.springboot.learn_jpa_hibernate.course;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Course {
+	
+	@Id
 	private long id;
+	
+//	Not needed @Column because the column name matches the variable name
+//	@Column(name="name")
 	private String name;
+
+//	@Column(name="author")
 	private String author;
 	
 	public Course() {
