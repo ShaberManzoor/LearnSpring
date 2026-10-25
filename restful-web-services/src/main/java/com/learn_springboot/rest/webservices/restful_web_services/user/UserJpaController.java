@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.learn_springboot.rest.webservices.restful_web_services.jpa.PostRepository;
 import com.learn_springboot.rest.webservices.restful_web_services.jpa.UserRepository;
 
 import jakarta.validation.Valid;
@@ -26,9 +27,11 @@ import jakarta.validation.Valid;
 public class UserJpaController {
 	
 	private UserRepository repo;
+	private PostRepository postRepo;
 	
-	public UserJpaController(UserRepository repo) {
+	public UserJpaController(UserRepository repo, PostRepository postRepo) {
 		this.repo = repo;
+		this.postRepo = postRepo;
 	}
 	
 	@GetMapping(path="/jpa/users")
@@ -62,6 +65,32 @@ public class UserJpaController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(savedUser.getId())
+				.toUri();
+		return ResponseEntity.created(location).build();
+	}
+	
+	@GetMapping(path="/jpa/users/{id}/posts")
+	public List<Post> retriveAllUserPosts(@PathVariable int id) {
+		Optional<User> user = repo.findById(id);
+		
+		if(user==null) throw new UserNotFoundException("id: " + id);
+		
+		return user.get().getPosts();
+	}
+	
+	@PostMapping(path="/jpa/users/{id}/post")
+	public ResponseEntity<Object> createPost(@PathVariable int id, @Valid @RequestBody Post post) {
+		Optional<User> user = repo.findById(id);
+		
+		if(user==null) throw new UserNotFoundException("id: " + id);
+		
+		post.setUser(user.get());
+		
+		Post savedPost = postRepo.save(post);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedPost.getId())
 				.toUri();
 		return ResponseEntity.created(location).build();
 	}
